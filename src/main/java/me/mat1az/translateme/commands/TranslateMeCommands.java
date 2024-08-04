@@ -19,6 +19,7 @@ public class TranslateMeCommands implements BasicCommand {
     @Override
     public void execute(@NotNull CommandSourceStack stack, @NotNull String[] args) {
         if (args.length > 0 && stack.getSender() instanceof Player p) {
+            //TODO: Permissions!!!
             TranslateService ts = TranslateService.getInstance();
             switch (args[0]) {
                 case "color" -> {
@@ -34,20 +35,6 @@ public class TranslateMeCommands implements BasicCommand {
                             }
 
                         } catch (NumberFormatException ignored) {
-                        }
-                    }
-                }
-                case "test" -> {
-                    if (args.length > 1) {
-                        p.sendRichMessage(ts.getMessage(Integer.parseInt(args[1]), null));
-                    }
-                }
-                case "backup" -> {
-                    if (args.length > 1) {
-                        if (ts.backup()) {
-                            p.sendRichMessage("success backup");
-                        } else {
-                            p.sendRichMessage("failed to backup");
                         }
                     }
                 }

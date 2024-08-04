@@ -8,6 +8,7 @@ public class TranslateMeEvents implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
+        //TODO Permissions here
         event.setLine(0, event.getLine(0).replace("&", "§"));
         event.setLine(1, event.getLine(1).replace("&", "§"));
         event.setLine(2, event.getLine(2).replace("&", "§"));
