@@ -1,0 +1,4 @@
+name: TranslateMe
+version: '${version}'
+main: me.mat1az.translateme.TranslateMe
+api-version: 1.21
