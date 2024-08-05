@@ -3,8 +3,11 @@ package me.mat1az.translateme.utils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import java.io.*;
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class DBHelper {
@@ -76,23 +79,14 @@ public class DBHelper {
      * @param sql query to execute.
      * @return returns a JSONArray that contains JSONObject.
      */
-    public JSONArray queryDDL(String sql) {
+    public ResultSet queryDDL(PreparedStatement sql) {
         //Bukkit.getServer().broadcastMessage("consulta bd "+new Exception().getStackTrace()[1].getClassName().split("\\.")[3]);
-        JSONArray jsonArray = new JSONArray();
         try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                JSONObject row = new JSONObject();
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); ++i) {
-                    row.put(rs.getMetaData().getColumnName(i), rs.getObject(i));
-                }
-                jsonArray.add(row);
-            }
+            return sql.executeQuery();
         } catch (SQLException e) {
             plugin.getLogger().severe(e.getMessage() + ", " + e.getSQLState());
         }
-        return jsonArray;
+        return null;
     }
 
     /**
@@ -101,22 +95,16 @@ public class DBHelper {
      * @param sql query to execute.
      * @return returns a JSONObject.
      */
-    public JSONObject singleDDL(String sql) {
-        JSONObject object = new JSONObject();
+    public String singleDDL(PreparedStatement sql) {
         try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            ResultSet rs = sql.executeQuery();
             if (rs.next()) {
-                JSONObject row = new JSONObject();
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); ++i) {
-                    row.put(rs.getMetaData().getColumnName(i), rs.getObject(i));
-                }
-                return row;
+                return rs.getString(1);
             }
         } catch (SQLException e) {
             plugin.getLogger().severe(e.getMessage() + ", " + e.getSQLState());
         }
-        return object;
+        return "";
     }
 
     /**

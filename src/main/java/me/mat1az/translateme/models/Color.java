@@ -5,6 +5,15 @@ public class Color {
     private int ID, level;
     private String value;
 
+    public Color() {
+    }
+
+    public Color(int ID, int level, String value) {
+        this.ID = ID;
+        this.level = level;
+        this.value = value;
+    }
+
     public int getID() {
         return ID;
     }
@@ -27,5 +36,14 @@ public class Color {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+                "ID=" + ID +
+                ", level=" + level +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

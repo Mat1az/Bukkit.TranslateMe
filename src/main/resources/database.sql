@@ -19,16 +19,17 @@ CREATE TABLE IF NOT EXISTS color (
 
 -- Table: color_set
 CREATE TABLE IF NOT EXISTS color_set (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
-               NOT NULL,
-    a  INTEGER REFERENCES color (id) ON DELETE CASCADE
-                                     ON UPDATE CASCADE
-               NOT NULL,
-    b  INTEGER REFERENCES color (id) ON DELETE CASCADE
-                                     ON UPDATE CASCADE
-               NOT NULL
+    id   INTEGER PRIMARY KEY AUTOINCREMENT
+                 NOT NULL,
+    name         DEFAULT ""
+                 NOT NULL,
+    a    INTEGER REFERENCES color (id) ON DELETE CASCADE
+                                       ON UPDATE CASCADE
+                 NOT NULL,
+    b    INTEGER REFERENCES color (id) ON DELETE CASCADE
+                                       ON UPDATE CASCADE
+                 NOT NULL
 );
-
 
 -- Table: language
 CREATE TABLE IF NOT EXISTS language (
@@ -41,14 +42,15 @@ CREATE TABLE IF NOT EXISTS language (
 
 -- Table: message
 CREATE TABLE IF NOT EXISTS message (
-    id       INTEGER PRIMARY KEY AUTOINCREMENT
+    id       INTEGER
                      NOT NULL,
     language INTEGER REFERENCES language (id) ON DELETE CASCADE
                                               ON UPDATE CASCADE
                      NOT NULL
                      DEFAULT (0),
     value    TEXT    NOT NULL
-                     DEFAULT ""
+                     DEFAULT "",
+                     PRIMARY KEY (id, language)
 );
 
 
@@ -83,30 +85,37 @@ CREATE TABLE IF NOT EXISTS users_colors (
                  DEFAULT (2)
 );
 
--- Trigger: create_user
-CREATE TRIGGER IF NOT EXISTS create_user
-                      BEFORE INSERT
-                          ON users_colors
-                    FOR EACH ROW
-BEGIN
-    INSERT OR REPLACE INTO user (
-                                    uuid
-                                )
-                                VALUES (
-                                    NEW.user
-                                );
-END;
-
 INSERT INTO color (id,'value') VALUES(0,"#00FF00");
 INSERT INTO color (id,'value') VALUES(1,"#c35353");
 INSERT INTO color (id,'value') VALUES(2,"#FFFF00");
 INSERT INTO color (id,'value') VALUES(3,"#dfda68");
-INSERT INTO color (id,'value') VALUES(4,"#A020F0");
-INSERT INTO color (id,'value') VALUES(5,"#9174a9");
+INSERT INTO color (id,'value') VALUES(4,"#6a0d91");
+INSERT INTO color (id,'value') VALUES(5,"#d9a8f4");
+INSERT INTO color (id,'value') VALUES(6,"#f48fb1");
+INSERT INTO color (id,'value') VALUES(7,"#fce4ec");
+INSERT INTO color (id,'value') VALUES(8,"#8e24aa");
+INSERT INTO color (id,'value') VALUES(9,"#e1bee7");
+INSERT INTO color (id,'value') VALUES(10,"#1e88e5");
+INSERT INTO color (id,'value') VALUES(11,"#e3f2fd");
+INSERT INTO color (id,'value') VALUES(12,"#fdd835");
+INSERT INTO color (id,'value') VALUES(13,"#fff9c4");
+INSERT INTO color (id,'value') VALUES(14,"#ec407a");
+INSERT INTO color (id,'value') VALUES(15,"#f8bbd0");
+INSERT INTO color (id,'value') VALUES(16,"#b76e79");
+INSERT INTO color (id,'value') VALUES(17,"#fce4ec");
 INSERT INTO color_set (id,a,b) VALUES(0,0,1);
 INSERT INTO color_set (id,a,b) VALUES(1,2,3);
-INSERT INTO color_set (id,a,b) VALUES(2,4,5);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Electric Violet',4,5);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Rose Quartz',6,7);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Nebula Purple',8,9);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Electric Blue',10,11);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Lemonade Yellow',12,13);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Electric Pink',14,15);
+INSERT INTO color_set (id,name,a,b) VALUES(2,'Rose Gold',16,17);
 INSERT INTO 'language' (id,name) VALUES(0,"English");
+INSERT INTO 'language' (id,name) VALUES(1,"Spanish");
+INSERT INTO message (id,language,value) VALUES (0,0,'This is a test message.');
+INSERT INTO message (id,language,value) VALUES (0,1,'Esto es un mensaje de prueba.');
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

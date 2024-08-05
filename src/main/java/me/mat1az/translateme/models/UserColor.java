@@ -54,4 +54,14 @@ public class UserColor {
     public void setC(int c) {
         this.c = c;
     }
+
+    @Override
+    public String toString() {
+        return "UserColor{" +
+                "user=" + user +
+                ", a=" + a +
+                ", b=" + b +
+                ", c=" + c +
+                '}';
+    }
 }
