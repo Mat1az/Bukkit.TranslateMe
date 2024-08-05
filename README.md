@@ -17,17 +17,21 @@
 
 ## Key Features
 
-* Relational SQLite database:
-  - Messaging system.
-  - Language system.
-  - Customized colors system.
-* In-memory database with autobackup every 2 minutes.
-* Easy third-party integration.
+* Relational SQL database:
+  - Messaging system
+  - Language system
+  - Colors system
+* Performance/Lightweight:
+  - SQLite in-memory database
+  - Frameworkless
+  - Singleton Service
+* Integration:
+  - Easy as third-party API.
 * Extra: Auto-colorize signs
 
 ## How To Use
 - Put [TranslateMe.jar](https://github.com/Mat1az/Bukkit.TranslateMe/releases/latest) into your plugins/ folder.
-- Manage your messages via SQLiteStudio.
+- Manage via SQLiteStudio.
 - Read the Documentation.
 
 ## Download
@@ -37,3 +41,10 @@ You can [download](https://github.com/Mat1az/Bukkit.TranslateMe/releases/latest)
 ## Documentation
 ### Database: ER diagram 
 ![translateme](https://github.com/user-attachments/assets/300cab4d-262c-40b2-ba36-0398caf51620)
+
+#### Default color_set
+ID | Colors
+--- | ---
+0 | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) ![#c35353](https://via.placeholder.com/15/c35353/000000?text=+)
+1 | ![#00FF00](https://via.placeholder.com/15/FFFF00/000000?text=+) ![#00FF00](https://via.placeholder.com/15/dfda68/000000?text=+)
+2 | ![#00FF00](https://via.placeholder.com/15/A020F0/000000?text=+) ![#00FF00](https://via.placeholder.com/15/9174a9/000000?text=+)
