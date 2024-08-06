@@ -39,12 +39,3 @@
 You can [download](https://github.com/Mat1az/Bukkit.TranslateMe/releases/latest) the latest version of TranslateMe.
 
 ## Documentation
-### Database: ER diagram 
-![translateme](https://github.com/user-attachments/assets/300cab4d-262c-40b2-ba36-0398caf51620)
-
-#### Default color_set
-ID | Colors
---- | ---
-0 | ![#FF0000](https://via.placeholder.com/15/FF0000/000000?text=+) ![#c35353](https://via.placeholder.com/15/c35353/000000?text=+)
-1 | ![#00FF00](https://via.placeholder.com/15/FFFF00/000000?text=+) ![#00FF00](https://via.placeholder.com/15/dfda68/000000?text=+)
-2 | ![#00FF00](https://via.placeholder.com/15/A020F0/000000?text=+) ![#00FF00](https://via.placeholder.com/15/9174a9/000000?text=+)
