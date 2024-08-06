@@ -10,6 +10,7 @@ import me.mat1az.translateme.utils.DBHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 
 public final class TranslateMe extends JavaPlugin {
@@ -55,11 +56,11 @@ public final class TranslateMe extends JavaPlugin {
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands commands = event.registrar();
-            commands.register("language", new TranslateMeCommands(this));
+            commands.register(this.getPluginMeta().getName().toLowerCase(), new TranslateMeCommands(this));
         });
     }
 
     private void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new TranslateMeEvents(), this);
+        this.getServer().getPluginManager().registerEvents(new TranslateMeEvents(this), this);
     }
 }

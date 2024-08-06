@@ -1,14 +1,16 @@
 package me.mat1az.translateme.services;
 
 import me.mat1az.translateme.models.Color;
+import me.mat1az.translateme.models.ColorSet;
+import me.mat1az.translateme.models.Language;
 import me.mat1az.translateme.models.UserColor;
 import me.mat1az.translateme.utils.DBHelper;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +44,8 @@ public class TranslateService implements TranslateInterface {
             ps.setString(1, String.valueOf(player));
             ps.setInt(2, language);
             return dbHelper.queryDML(ps);
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return 0;
     }
 
@@ -57,8 +60,57 @@ public class TranslateService implements TranslateInterface {
             ps.setInt(3, uc.getB());
             ps.setInt(4, uc.getC());
             return dbHelper.queryDML(ps);
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return 0;
+    }
+
+    @Override
+    public ColorSet getColorSet(int id) {
+        try {
+            PreparedStatement ps = dbHelper.getConnection().prepareStatement("SELECT * from color_set WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = dbHelper.queryDDL(ps);
+            if (rs.next()) {
+                return new ColorSet(rs.getInt("id"), rs.getString("name"), getColor(rs.getInt("a")), getColor(rs.getInt("b")));
+            }
+        } catch (SQLException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public List<ColorSet> getColorSets() {
+        try {
+            List<ColorSet> list = new ArrayList<>();
+            PreparedStatement ps = dbHelper.getConnection().prepareStatement("SELECT * FROM color_set");
+            ResultSet rs = dbHelper.queryDDL(ps);
+            while (rs.next()) {
+                ColorSet colorSet = new ColorSet(rs.getInt("id"), rs.getString("name"), getColor(rs.getInt("a")), getColor(rs.getInt("b")));
+                list.add(colorSet);
+            }
+            return list;
+        } catch (Exception ignored) {
+
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Language> getLanguages() {
+        try {
+            List<Language> list = new ArrayList<>();
+            PreparedStatement ps = dbHelper.getConnection().prepareStatement("SELECT * FROM language");
+            ResultSet rs = dbHelper.queryDDL(ps);
+            while (rs.next()) {
+                Language l = new Language(rs.getInt("id"), rs.getString("name"));
+                list.add(l);
+            }
+            return list;
+        } catch (Exception ignored) {
+
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -149,7 +201,8 @@ public class TranslateService implements TranslateInterface {
                 }
             }
             return translate(message);
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return "";
     }
 }

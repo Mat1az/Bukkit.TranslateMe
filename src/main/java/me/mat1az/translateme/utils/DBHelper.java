@@ -1,13 +1,10 @@
 package me.mat1az.translateme.utils;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class DBHelper {

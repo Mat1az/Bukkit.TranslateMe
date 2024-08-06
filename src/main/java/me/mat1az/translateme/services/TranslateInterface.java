@@ -1,6 +1,8 @@
 package me.mat1az.translateme.services;
 
 import me.mat1az.translateme.models.Color;
+import me.mat1az.translateme.models.ColorSet;
+import me.mat1az.translateme.models.Language;
 import me.mat1az.translateme.models.UserColor;
 
 import java.util.List;
@@ -21,5 +23,9 @@ public interface TranslateInterface {
     String translate(String message);
 
     String getMessage(int id, UUID player);
+
+    List<ColorSet> getColorSets();
+    List<Language> getLanguages();
+    ColorSet getColorSet(int id);
 
 }
