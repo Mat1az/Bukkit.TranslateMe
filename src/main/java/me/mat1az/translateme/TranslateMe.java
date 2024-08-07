@@ -31,7 +31,7 @@ public final class TranslateMe extends JavaPlugin {
     }
 
     private void dbSetup() {
-        DBHelper.getInstance(this).initDBInstance();
+        DBHelper.getInstance(this).init();
     }
 
     private void configSetup() {
@@ -49,7 +49,7 @@ public final class TranslateMe extends JavaPlugin {
             if (TranslateService.instance.backup()) {
                 this.getServer().broadcast(Component.text('[' + getPluginMeta().getName() + "] Database saved."));
             }
-        }, 0, 20 * 120);
+        }, 0, 20 * 120 * 5);
     }
 
     private void registerCommands() {

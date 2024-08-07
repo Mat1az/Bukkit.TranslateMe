@@ -6,6 +6,7 @@ import me.mat1az.translateme.models.Color;
 import me.mat1az.translateme.models.ColorSet;
 import me.mat1az.translateme.models.UserColor;
 import me.mat1az.translateme.services.TranslateService;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class TranslateMeCommands implements BasicCommand {
 
@@ -33,9 +36,8 @@ public class TranslateMeCommands implements BasicCommand {
                     if (args.length > 1) {
                         try {
                             int a = Integer.parseInt(args[1]);
-                            int b = Integer.parseInt(args[2]);
-                            int c = Integer.parseInt(args[3]);
-                            if (ts.setUserColor(p.getUniqueId(), new UserColor(a, b, c)) > 0) {
+                            Integer[] dColors = Objects.requireNonNull(plugin.getConfig().getList("DEFAULT_COLOR_SET")).toArray(new Integer[0]);
+                            if (ts.setUserColor(p.getUniqueId(), new UserColor(a, dColors[1], dColors[2])) > 0) {
                                 p.sendRichMessage('[' + plugin.getName() + "]<green> Color changed successfully.");
                             } else {
                                 p.sendRichMessage('[' + plugin.getName() + "]<red> Error changing your color. Please contact an administrator.");
@@ -50,11 +52,15 @@ public class TranslateMeCommands implements BasicCommand {
                         String f = args[1];
                         switch (f) {
                             case "sel" -> {
-                                p.sendRichMessage('[' + plugin.getName() + "] " + ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId()));
+                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "Replace1"));
+                                p.sendRichMessage('[' + plugin.getName() + "] " + ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "ReplaceTest").content());
                             }
                             case "reload" -> {
                                 plugin.reloadConfig();
                                 p.sendRichMessage('[' + plugin.getName() + "] Config reloaded.");
+                                if (ts.reloadDB()) {
+                                    p.sendRichMessage('[' + plugin.getName() + "] Database reloaded.");
+                                }
                             }
                         }
                     }
@@ -105,7 +111,7 @@ public class TranslateMeCommands implements BasicCommand {
                     }
                 }
                 default -> {
-                    p.sendRichMessage('[' + plugin.getName() + "]<red> bad usage.");
+                    p.sendRichMessage('[' + plugin.getName() + "]<red> Bad usage.");
                 }
             }
         }

@@ -32,7 +32,7 @@ public class DBHelper {
     public static final String DB_NAME = "database.db";
     private String dbPath;
 
-    public void initDBInstance() {
+    public boolean init() {
         try {
             this.dbPath = plugin.getDataFolder() + File.separator + DB_NAME;
             if (new File(plugin.getDataFolder(), DB_NAME).exists()) {
@@ -41,17 +41,19 @@ public class DBHelper {
                 connection.createStatement().executeUpdate("restore from " + dbPath);
                 connection.createStatement().executeUpdate("PRAGMA foreign_keys = ON");
                 plugin.getLogger().info("Restored the database from " + dbPath + " to memory.");
+                return true;
             } else {
                 String url = "jdbc:sqlite:" + dbPath;
                 connection = DriverManager.getConnection(url);
                 connection.createStatement().executeUpdate(new String(Objects.requireNonNull(plugin.getResource("database.sql")).readAllBytes()));
                 plugin.getLogger().info("Created " + dbPath + " file.");
                 connection.close();
-                initDBInstance();
+                init();
             }
         } catch (SQLException | IOException e) {
             plugin.getLogger().severe(e.getMessage());
         }
+        return false;
     }
 
     /**

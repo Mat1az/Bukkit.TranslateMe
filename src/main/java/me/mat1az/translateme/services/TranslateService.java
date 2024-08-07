@@ -5,6 +5,10 @@ import me.mat1az.translateme.models.ColorSet;
 import me.mat1az.translateme.models.Language;
 import me.mat1az.translateme.models.UserColor;
 import me.mat1az.translateme.utils.DBHelper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +39,16 @@ public class TranslateService implements TranslateInterface {
     public boolean backup() {
         return dbHelper.backup();
     }
+
+    public boolean reloadDB() {
+        try {
+            dbHelper.getConnection().close();
+            return dbHelper.init();
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
 
     @Override
     public int setLanguage(UUID player, int language) {
@@ -194,15 +208,44 @@ public class TranslateService implements TranslateInterface {
                 String s = m.group(i);
                 //If variables contains %! it ignores to give color.
                 if (!s.contains("%!")) {
-                    message = message.replace(s, getColor(uc.getB()).getValue() + s + getColor(uc.getA()).getValue());
+                    TextComponent c = (TextComponent) MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getB()).getB().getValue() + '>' + s + "</gradient>");
+                    plugin.getServer().broadcast(Component.text(c.content()));
+                    plugin.getServer().broadcast(c);
+                    plugin.getServer().broadcast(Component.text(c.toString()));
+                    plugin.getServer().broadcast(Component.text(s));
+                    //message = message.replace(s, getColor(uc.getA()).getValue() + s + getColor(uc.getB()).getValue());
+                    message = message.replace(s, c.content());
                     if (m.end() < i) {
                         ++i;
                     }
                 }
             }
-            return translate(message);
+            return message;
         } catch (SQLException ignored) {
         }
         return "";
+    }
+
+    public TextComponent getMessage(int id, UUID player, String replacements) {
+        try {
+            String sql = "SELECT value FROM message WHERE id = ? AND language = (SELECT IFNULL((SELECT language FROM user WHERE uuid = ?), ?))";
+            PreparedStatement ps = dbHelper.getConnection().prepareStatement(sql);
+            UserColor uc = getUserColor(player);
+            ps.setInt(1, id);
+            ps.setString(2, String.valueOf(player));
+            ps.setInt(3, plugin.getConfig().getInt("DEFAULT_LANG"));
+            //This find %variables in message then gives a color.
+            TextComponent component = Component.text(dbHelper.singleDDL(ps));
+            Pattern p = Pattern.compile("%[A-z]+");
+            component = (TextComponent) component.replaceText(TextReplacementConfig.builder()
+                    .match(p)
+                    .once()
+                    .replacement(builder -> MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getB()).getB().getValue() + '>' + replacements + "</gradient>"))
+                    .build());
+            return component;
+        } catch (Exception e) {
+
+        }
+        return Component.text("error");
     }
 }

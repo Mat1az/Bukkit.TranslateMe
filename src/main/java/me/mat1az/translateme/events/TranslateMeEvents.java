@@ -2,6 +2,7 @@ package me.mat1az.translateme.events;
 
 import me.mat1az.translateme.models.ColorSet;
 import me.mat1az.translateme.models.Language;
+import me.mat1az.translateme.models.UserColor;
 import me.mat1az.translateme.services.TranslateService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -50,6 +51,8 @@ public class TranslateMeEvents implements Listener {
                             ItemStack b = new ItemStack(Material.WRITABLE_BOOK);
                             ItemMeta bm = b.getItemMeta();
                             bm.displayName(Component.text(l.getName()));
+                            UserColor uc = ts.getUserColor(p.getUniqueId());
+                            bm.displayName(MiniMessage.builder().build().deserialize("<gradient:" + ts.getColor(uc.getA()).getValue() + ':' + ts.getColor(uc.getB()).getValue() + '>' + l.getName() + "</gradient>"));
                             bm.setCustomModelData(Integer.parseInt(String.valueOf(id) + l.getID()));
                             b.setItemMeta(bm);
                             inv.addItem(b);
