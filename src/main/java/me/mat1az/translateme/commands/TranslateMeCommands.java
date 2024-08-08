@@ -52,8 +52,7 @@ public class TranslateMeCommands implements BasicCommand {
                         String f = args[1];
                         switch (f) {
                             case "sel" -> {
-                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "Replace1"));
-                                p.sendRichMessage('[' + plugin.getName() + "] " + ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "ReplaceTest").content());
+                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "Test"));
                             }
                             case "reload" -> {
                                 plugin.reloadConfig();

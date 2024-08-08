@@ -240,7 +240,7 @@ public class TranslateService implements TranslateInterface {
             component = (TextComponent) component.replaceText(TextReplacementConfig.builder()
                     .match(p)
                     .once()
-                    .replacement(builder -> MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getB()).getB().getValue() + '>' + replacements + "</gradient>"))
+                    .replacement(builder -> MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getA()).getB().getValue() + '>' + replacements + "</gradient>"))
                     .build());
             return component;
         } catch (Exception e) {
