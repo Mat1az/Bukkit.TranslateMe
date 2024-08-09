@@ -1,9 +1,7 @@
 package me.mat1az.translateme.services;
 
-import me.mat1az.translateme.models.Color;
-import me.mat1az.translateme.models.ColorSet;
-import me.mat1az.translateme.models.Language;
-import me.mat1az.translateme.models.UserColor;
+import me.mat1az.translateme.models.*;
+import net.kyori.adventure.text.TextComponent;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,9 +18,9 @@ public interface TranslateInterface {
 
     UserColor getUserColor(UUID player);
 
-    String translate(String message);
+    String colorize(String message);
 
-    String getMessage(int id, UUID player);
+    TextComponent getMessage(int id, UUID player, ReplaceHolder... repl);
 
     List<ColorSet> getColorSets();
     List<Language> getLanguages();

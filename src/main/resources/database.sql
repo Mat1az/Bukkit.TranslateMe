@@ -85,10 +85,10 @@ CREATE TABLE IF NOT EXISTS users_colors (
                  DEFAULT (2)
 );
 
-INSERT INTO color (id,'value') VALUES(0,"#00FF00");
-INSERT INTO color (id,'value') VALUES(1,"#c35353");
-INSERT INTO color (id,'value') VALUES(2,"#FFFF00");
-INSERT INTO color (id,'value') VALUES(3,"#dfda68");
+INSERT INTO color (id,'value') VALUES(0,"#e6e6fa");
+INSERT INTO color (id,'value') VALUES(1,"#f3e5f5");
+INSERT INTO color (id,'value') VALUES(2,"#ffccb6");
+INSERT INTO color (id,'value') VALUES(3,"#ffebcd");
 INSERT INTO color (id,'value') VALUES(4,"#6a0d91");
 INSERT INTO color (id,'value') VALUES(5,"#d9a8f4");
 INSERT INTO color (id,'value') VALUES(6,"#f48fb1");
@@ -103,8 +103,8 @@ INSERT INTO color (id,'value') VALUES(14,"#ec407a");
 INSERT INTO color (id,'value') VALUES(15,"#f8bbd0");
 INSERT INTO color (id,'value') VALUES(16,"#b76e79");
 INSERT INTO color (id,'value') VALUES(17,"#fce4ec");
-INSERT INTO color_set (id,a,b) VALUES(0,0,1);
-INSERT INTO color_set (id,a,b) VALUES(1,2,3);
+INSERT INTO color_set (id,name,a,b) VALUES(0,'Lavender Fields',0,1);
+INSERT INTO color_set (name,a,b) VALUES('Peach Cream',2,3);
 INSERT INTO color_set (name,a,b) VALUES('Electric Violet',4,5);
 INSERT INTO color_set (name,a,b) VALUES('Rose Quartz',6,7);
 INSERT INTO color_set (name,a,b) VALUES('Nebula Purple',8,9);
@@ -114,8 +114,8 @@ INSERT INTO color_set (name,a,b) VALUES('Electric Pink',14,15);
 INSERT INTO color_set (name,a,b) VALUES('Rose Gold',16,17);
 INSERT INTO 'language' (id,name) VALUES(0,"English");
 INSERT INTO 'language' (id,name) VALUES(1,"Spanish");
-INSERT INTO message (id,language,value) VALUES (0,0,'This is a test message.');
-INSERT INTO message (id,language,value) VALUES (0,1,'Esto es un mensaje de prueba.');
+INSERT INTO message (id,language,value) VALUES (0,0,'This is a {1} message {0}.');
+INSERT INTO message (id,language,value) VALUES (0,1,'Esto es un {0} mensaje de prueba {1}.');
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

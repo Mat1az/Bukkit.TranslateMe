@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.mat1az.translateme.models.Color;
 import me.mat1az.translateme.models.ColorSet;
+import me.mat1az.translateme.models.ReplaceHolder;
 import me.mat1az.translateme.models.UserColor;
 import me.mat1az.translateme.services.TranslateService;
 import net.kyori.adventure.text.Component;
@@ -52,7 +53,7 @@ public class TranslateMeCommands implements BasicCommand {
                         String f = args[1];
                         switch (f) {
                             case "sel" -> {
-                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), "Test"));
+                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), ReplaceHolder.of(0,"Test"),ReplaceHolder.of(1,"Hello")));
                             }
                             case "reload" -> {
                                 plugin.reloadConfig();

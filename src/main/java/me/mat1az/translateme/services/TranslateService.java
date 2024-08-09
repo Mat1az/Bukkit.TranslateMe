@@ -1,14 +1,13 @@
 package me.mat1az.translateme.services;
 
-import me.mat1az.translateme.models.Color;
-import me.mat1az.translateme.models.ColorSet;
-import me.mat1az.translateme.models.Language;
-import me.mat1az.translateme.models.UserColor;
+import me.mat1az.translateme.models.*;
 import me.mat1az.translateme.utils.DBHelper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.util.RGBLike;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -179,7 +178,7 @@ public class TranslateService implements TranslateInterface {
     }
 
     @Override
-    public String translate(String message) {
+    public String colorize(String message) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher matcher = pattern.matcher(message);
 
@@ -192,7 +191,7 @@ public class TranslateService implements TranslateInterface {
     }
 
     @Override
-    public String getMessage(int id, UUID player) {
+    public TextComponent getMessage(int id, UUID player, ReplaceHolder... h) {
         try {
             String sql = "SELECT value FROM message WHERE id = ? AND language = (SELECT IFNULL((SELECT language FROM user WHERE uuid = ?), ?))";
             PreparedStatement ps = dbHelper.getConnection().prepareStatement(sql);
@@ -200,52 +199,30 @@ public class TranslateService implements TranslateInterface {
             ps.setInt(1, id);
             ps.setString(2, String.valueOf(player));
             ps.setInt(3, plugin.getConfig().getInt("DEFAULT_LANG"));
-            String message = dbHelper.singleDDL(ps);
-            //This find %variables in message then gives a color.
-            Matcher m = Pattern.compile("%[A-z]+").matcher(message);
-            int i = 0;
-            while (m.find()) {
-                String s = m.group(i);
-                //If variables contains %! it ignores to give color.
-                if (!s.contains("%!")) {
-                    TextComponent c = (TextComponent) MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getB()).getB().getValue() + '>' + s + "</gradient>");
-                    plugin.getServer().broadcast(Component.text(c.content()));
-                    plugin.getServer().broadcast(c);
-                    plugin.getServer().broadcast(Component.text(c.toString()));
-                    plugin.getServer().broadcast(Component.text(s));
-                    //message = message.replace(s, getColor(uc.getA()).getValue() + s + getColor(uc.getB()).getValue());
-                    message = message.replace(s, c.content());
-                    if (m.end() < i) {
-                        ++i;
-                    }
+            String raw = dbHelper.singleDDL(ps);
+            TextComponent component = Component.empty();
+            String regex = "\\{[0-9]+}";
+            for (String s : raw.splitWithDelimiters(regex, 0)) {
+                TextComponent a;
+                if (!s.matches(regex)) {
+                    a = (TextComponent) MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getB()).getA().getValue() + ':' + getColorSet(uc.getB()).getB().getValue() + '>' + s + "</gradient>");
+                } else {
+                    a = Component.text(s);
                 }
+                component = component.append(a);
             }
-            return message;
-        } catch (SQLException ignored) {
-        }
-        return "";
-    }
-
-    public TextComponent getMessage(int id, UUID player, String replacements) {
-        try {
-            String sql = "SELECT value FROM message WHERE id = ? AND language = (SELECT IFNULL((SELECT language FROM user WHERE uuid = ?), ?))";
-            PreparedStatement ps = dbHelper.getConnection().prepareStatement(sql);
-            UserColor uc = getUserColor(player);
-            ps.setInt(1, id);
-            ps.setString(2, String.valueOf(player));
-            ps.setInt(3, plugin.getConfig().getInt("DEFAULT_LANG"));
-            //This find %variables in message then gives a color.
-            TextComponent component = Component.text(dbHelper.singleDDL(ps));
-            Pattern p = Pattern.compile("%[A-z]+");
-            component = (TextComponent) component.replaceText(TextReplacementConfig.builder()
-                    .match(p)
-                    .once()
-                    .replacement(builder -> MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getA()).getB().getValue() + '>' + replacements + "</gradient>"))
-                    .build());
+            for (ReplaceHolder r : h) {
+                Pattern p = Pattern.compile("\\{[" + r.getPlaceholder() + "]+}");
+                component = (TextComponent) component.replaceText(TextReplacementConfig.builder()
+                        .match(p)
+                        .once()
+                        .replacement(builder -> MiniMessage.builder().build().deserialize("<gradient:" + getColorSet(uc.getA()).getA().getValue() + ':' + getColorSet(uc.getA()).getB().getValue() + '>' + r.getReplace() + "</gradient>"))
+                        .build());
+            }
             return component;
         } catch (Exception e) {
 
         }
-        return Component.text("error");
+        return Component.text("Error");
     }
 }
