@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
 <h4 align="center">Simple Messaging System for Minecraft (Paper 1.21)</h4>
 
