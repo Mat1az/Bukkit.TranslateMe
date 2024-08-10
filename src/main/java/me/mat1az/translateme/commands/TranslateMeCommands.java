@@ -37,8 +37,11 @@ public class TranslateMeCommands implements BasicCommand {
                     if (args.length > 1) {
                         try {
                             int a = Integer.parseInt(args[1]);
+                            int b = Integer.parseInt(args[2]);
+                            int c = Integer.parseInt(args[3]);
                             Integer[] dColors = Objects.requireNonNull(plugin.getConfig().getList("DEFAULT_COLOR_SET")).toArray(new Integer[0]);
-                            if (ts.setUserColor(p.getUniqueId(), new UserColor(a, dColors[1], dColors[2])) > 0) {
+                            UserColor uc = ts.getUserColor(p.getUniqueId()) == null ? new UserColor(dColors[0], dColors[1], dColors[2]) : new UserColor(a, b, c);
+                            if (ts.setUserColor(p.getUniqueId(), uc) > 0) {
                                 p.sendRichMessage('[' + plugin.getName() + "]<green> Color changed successfully.");
                             } else {
                                 p.sendRichMessage('[' + plugin.getName() + "]<red> Error changing your color. Please contact an administrator.");
@@ -53,7 +56,7 @@ public class TranslateMeCommands implements BasicCommand {
                         String f = args[1];
                         switch (f) {
                             case "sel" -> {
-                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), ReplaceHolder.of(0,"Test"),ReplaceHolder.of(1,"Hello")));
+                                p.sendMessage(ts.getMessage(Integer.parseInt(args[2]), p.getUniqueId(), ReplaceHolder.of(0, "Test"), ReplaceHolder.of(1, "Hello")));
                             }
                             case "reload" -> {
                                 plugin.reloadConfig();

@@ -41,15 +41,12 @@ public final class TranslateMe extends JavaPlugin {
         }
     }
 
-    /**
-     * Backup database into file every 2 minutes
-     */
     public void backupSetup() {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if (TranslateService.instance.backup()) {
                 this.getServer().broadcast(Component.text('[' + getPluginMeta().getName() + "] Database saved."));
             }
-        }, 0, 20 * 120 * 5);
+        }, 0, 20L * this.getConfig().getInt("DATABASE_SAVE"));
     }
 
     private void registerCommands() {
